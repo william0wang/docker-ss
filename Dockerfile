@@ -5,8 +5,8 @@
 FROM alpine
 MAINTAINER William Wang <william@10ln.com>
 
-ARG SS_VER=3.0.5
-ARG SS_URL=https://github.com/shadowsocks/shadowsocks-libev/releases/download/v3.0.5/shadowsocks-libev-$SS_VER.tar.gz
+ARG SS_VER=3.0.6
+ARG SS_URL=https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$SS_VER/shadowsocks-libev-$SS_VER.tar.gz
 
 ENV SERVER_ADDR 0.0.0.0
 ENV SERVER_PORT 8388
@@ -18,16 +18,18 @@ ENV DNS_ADDR_2  8.8.4.4
 
 RUN set -ex && \
     apk add --no-cache --virtual .build-deps \
-                                asciidoc \
                                 autoconf \
                                 build-base \
                                 curl \
+                                libev-dev \
                                 libtool \
                                 linux-headers \
-                                openssl-dev \
+                                udns-dev \
+                                libsodium-dev \
+                                mbedtls-dev \
                                 pcre-dev \
                                 tar \
-                                xmlto && \
+                                udns-dev && \
     cd /tmp && \
     curl -sSL $SS_URL | tar xz --strip 1 && \
     ./configure --prefix=/usr --disable-documentation && \
@@ -53,6 +55,8 @@ CMD ss-server -s $SERVER_ADDR \
               -k $PASSWORD \
               -m $METHOD \
               -t $TIMEOUT \
+              --fast-open \
+              --acl $ACL_FILE \
               -d $DNS_ADDR \
               -d $DNS_ADDR_2 \
-              -u
+              -u 
