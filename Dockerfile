@@ -21,7 +21,7 @@ echo "https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.8/community" >> /etc/apk/re
 set -ex && \
     apk add --no-cache --virtual .build-deps \
     bash ca-certificates openssl curl tzdata pngquant \
-    autoconf automake build-base libtool nasm \
+    autoconf automake build-base libtool nasm c-ares-dev \
                                 autoconf \
                                 build-base \
                                 curl \
